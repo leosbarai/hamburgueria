@@ -18,10 +18,13 @@ public class UsuarioService {
         return repository.findAll();
     }
 
-    public Usuario findById(Long id){
+    public Usuario findById(Long id) {
         Optional<Usuario> usuario = repository.findById(id);
         return usuario.orElseThrow(() -> new NullPointerException());
     }
 
+    public Usuario insert(Usuario usuario) {
+        return repository.save(usuario);
+    }
 
 }
