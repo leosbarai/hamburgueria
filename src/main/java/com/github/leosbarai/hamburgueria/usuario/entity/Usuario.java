@@ -1,4 +1,4 @@
-package com.github.leosbarai.hamburgueria.entity;
+package com.github.leosbarai.hamburgueria.usuario.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

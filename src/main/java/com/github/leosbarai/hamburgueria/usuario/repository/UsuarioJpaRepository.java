@@ -1,6 +1,6 @@
-package com.github.leosbarai.hamburgueria.repository;
+package com.github.leosbarai.hamburgueria.usuario.repository;
 
-import com.github.leosbarai.hamburgueria.entity.Usuario;
+import com.github.leosbarai.hamburgueria.usuario.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
