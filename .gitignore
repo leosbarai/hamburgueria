@@ -17,7 +17,9 @@ target/
 .springBeans
 
 ### LOGS ###
+target/
 logs/
+logs/*
 
 # Log file
 *.log
