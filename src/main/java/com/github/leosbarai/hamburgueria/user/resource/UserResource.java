@@ -1,7 +1,7 @@
-package com.github.leosbarai.hamburgueria.usuario.resource;
+package com.github.leosbarai.hamburgueria.user.resource;
 
-import com.github.leosbarai.hamburgueria.usuario.entity.Usuario;
-import com.github.leosbarai.hamburgueria.usuario.service.UsuarioService;
+import com.github.leosbarai.hamburgueria.user.entity.User;
+import com.github.leosbarai.hamburgueria.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,39 +19,39 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/usuarios")
-public class UsuarioResource {
+@RequestMapping("/users")
+public class UserResource {
 
     @Autowired
-    UsuarioService service;
+    UserService service;
 
     @GetMapping
-    public List<Usuario> listar() {
+    public List<User> list() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscaPorId(@PathVariable Long id) {
-        Optional<Usuario> usuario = Optional.ofNullable(service.findById(id));
-        return usuario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<User> findUserById(@PathVariable Long id) {
+        Optional<User> user = Optional.ofNullable(service.findById(id));
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> insereUsuario(@RequestBody Usuario usuario) {
-        usuario = service.insert(usuario);
+    public ResponseEntity<User> postUser(@RequestBody User user) {
+        user = service.insert(user);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(usuario.getId()).toUri();
-        return ResponseEntity.created(uri).body(usuario);
+                .buildAndExpand(user.getId()).toUri();
+        return ResponseEntity.created(uri).body(user);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> alteraUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
-        usuario = service.update(id, usuario);
-        return ResponseEntity.ok().body(usuario);
+    public ResponseEntity<User> putUser(@PathVariable Long id, @RequestBody User user) {
+        user = service.update(id, user);
+        return ResponseEntity.ok().body(user);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletaUsuario(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }

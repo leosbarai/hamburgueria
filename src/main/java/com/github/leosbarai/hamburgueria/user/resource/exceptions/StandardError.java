@@ -1,4 +1,4 @@
-package com.github.leosbarai.hamburgueria.usuario.resource.exceptions;
+package com.github.leosbarai.hamburgueria.user.resource.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

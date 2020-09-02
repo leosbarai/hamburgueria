@@ -1,7 +1,7 @@
-package com.github.leosbarai.hamburgueria.usuario.resource.exceptions;
+package com.github.leosbarai.hamburgueria.user.resource.exceptions;
 
-import com.github.leosbarai.hamburgueria.usuario.service.exceptions.DataBaseException;
-import com.github.leosbarai.hamburgueria.usuario.service.exceptions.ResourceNotFoundException;
+import com.github.leosbarai.hamburgueria.user.service.exceptions.DataBaseException;
+import com.github.leosbarai.hamburgueria.user.service.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

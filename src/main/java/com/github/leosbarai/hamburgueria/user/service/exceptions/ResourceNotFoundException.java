@@ -1,4 +1,4 @@
-package com.github.leosbarai.hamburgueria.usuario.service.exceptions;
+package com.github.leosbarai.hamburgueria.user.service.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException {
 
