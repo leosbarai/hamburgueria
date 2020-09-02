@@ -17,7 +17,6 @@ target/
 .springBeans
 
 ### LOGS ###
-target/
 logs/
 logs/*
 
