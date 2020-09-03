@@ -47,7 +47,7 @@ public class UserService {
         return repository.save(user);
     }
 
-    public User update(Long id, User updateUser) {
+    public User update(Long id, UserDTO updateUser) {
         try {
             User user = repository.getOne(id);
             updateDate(user, updateUser);
@@ -57,9 +57,9 @@ public class UserService {
         }
     }
 
-    private void updateDate(User user, User updateUser) {
-        user.setEmail(updateUser.getEmail());
-        user.setName(updateUser.getName());
+    private void updateDate(User user, UserDTO updateUser) {
+        user.setEmail(updateUser.email);
+        user.setName(updateUser.name);
     }
 
     public void delete(Long id) {
