@@ -1,6 +1,8 @@
 package com.github.leosbarai.hamburgueria.user.service;
 
+import com.github.leosbarai.hamburgueria.user.dto.UserDTO;
 import com.github.leosbarai.hamburgueria.user.entity.User;
+import com.github.leosbarai.hamburgueria.user.parser.UserParser;
 import com.github.leosbarai.hamburgueria.user.repository.UserJpaRepository;
 import com.github.leosbarai.hamburgueria.user.service.exceptions.DataBaseException;
 import com.github.leosbarai.hamburgueria.user.service.exceptions.ResourceNotFoundException;
@@ -12,20 +14,30 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
-    @Autowired
-    UserJpaRepository repository;
+    private final UserJpaRepository repository;
 
-    public List<User> findAll() {
-        return repository.findAll();
+    private final UserParser parser;
+
+    @Autowired
+    public UserService(UserJpaRepository repository, UserParser parser) {
+        this.repository = repository;
+        this.parser = parser;
     }
 
-    public User findById(Long id) {
+    public List<UserDTO> findAll() {
+        List<User> listUser = repository.findAll();
+        List<UserDTO> userDTOList = listUser.stream().map(parser::toDTO).collect(Collectors.toList());
+        return userDTOList;
+    }
+
+    public UserDTO findById(Long id) {
         Optional<User> user = repository.findById(id);
-        return user.orElseThrow(() -> new ResourceNotFoundException(id));
+        return parser.toDTO(user.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
     public User insert(User user) {

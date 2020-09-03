@@ -1,5 +1,6 @@
 package com.github.leosbarai.hamburgueria.user.resource;
 
+import com.github.leosbarai.hamburgueria.user.dto.UserDTO;
 import com.github.leosbarai.hamburgueria.user.entity.User;
 import com.github.leosbarai.hamburgueria.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +27,14 @@ public class UserResource {
     UserService service;
 
     @GetMapping
-    public List<User> list() {
+    public List<UserDTO> list() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findUserById(@PathVariable Long id) {
-        Optional<User> user = Optional.ofNullable(service.findById(id));
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<UserDTO> findUserById(@PathVariable Long id) {
+        Optional<UserDTO> userDTO = Optional.ofNullable(service.findById(id));
+        return userDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
