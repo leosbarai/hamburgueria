@@ -40,7 +40,10 @@ public class UserService {
         return parser.toDTO(user.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
-    public User insert(User user) {
+    public User insert(UserDTO userDTO) {
+        User user = new User();
+        user.setName(userDTO.name);
+        user.setEmail(userDTO.email);
         return repository.save(user);
     }
 
