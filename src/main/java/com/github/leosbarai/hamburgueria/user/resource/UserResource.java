@@ -5,6 +5,7 @@ import com.github.leosbarai.hamburgueria.user.entity.User;
 import com.github.leosbarai.hamburgueria.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +24,15 @@ import java.util.Optional;
 @RequestMapping("/users")
 public class UserResource {
 
+    private final UserService service;
+
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    UserService service;
+    public UserResource(UserService service, PasswordEncoder passwordEncoder) {
+        this.service = service;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @GetMapping
     public List<UserDTO> list() {
@@ -39,6 +47,8 @@ public class UserResource {
 
     @PostMapping
     public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO) {
+        String criptoPass = passwordEncoder.encode(userDTO.password);
+        userDTO.password = criptoPass;
         User user = service.insert(userDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(user.getId()).toUri();

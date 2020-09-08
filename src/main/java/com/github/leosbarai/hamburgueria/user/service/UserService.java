@@ -44,6 +44,7 @@ public class UserService {
         User user = new User();
         user.setName(userDTO.name);
         user.setEmail(userDTO.email);
+        user.setPassword(userDTO.password);
         return repository.save(user);
     }
 

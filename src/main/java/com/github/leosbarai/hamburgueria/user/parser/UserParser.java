@@ -13,6 +13,8 @@ public class UserParser {
         dto.id = user.getId();
         dto.name = user.getName();
         dto.email = user.getEmail();
+        dto.password = user.getPassword();
+        dto.admin = user.isAdmin();
 
         return dto;
     }
@@ -22,6 +24,8 @@ public class UserParser {
 
         entity.setName(dto.name);
         entity.setEmail(dto.email);
+        entity.setPassword(dto.password);
+        entity.setAdmin(dto.admin);
 
         return entity;
     }
