@@ -1,9 +1,8 @@
 package com.github.leosbarai.hamburgueria.user.service.impl;
 
-import com.github.leosbarai.hamburgueria.user.dto.UserDTO;
+import com.github.leosbarai.hamburgueria.user.entity.User;
 import com.github.leosbarai.hamburgueria.user.repository.UserJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,15 +24,15 @@ public class UserServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
-        UserDTO user = repository.findByEmail(userEmail)
+        User user = repository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
 
-        String[] roles = user.admin ? new String[]{"ADMIN", "USER"} : new String[]{"USER"};
+        String[] roles = user.isAdmin() ? new String[]{"ADMIN", "USER"} : new String[]{"USER"};
 
-        return User
+        return org.springframework.security.core.userdetails.User
                 .builder()
-                .username(user.email)
-                .password(user.password)
+                .username(user.getEmail())
+                .password(user.getPassword())
                 .roles()
                 .build();
     }
