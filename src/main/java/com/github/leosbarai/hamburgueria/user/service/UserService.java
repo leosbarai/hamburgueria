@@ -1,5 +1,6 @@
 package com.github.leosbarai.hamburgueria.user.service;
 
+import com.github.leosbarai.hamburgueria.config.PasswordCheck;
 import com.github.leosbarai.hamburgueria.user.dto.UserDTO;
 import com.github.leosbarai.hamburgueria.user.entity.User;
 import com.github.leosbarai.hamburgueria.user.parser.UserParser;
@@ -9,6 +10,7 @@ import com.github.leosbarai.hamburgueria.user.service.exceptions.ResourceNotFoun
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -23,16 +25,21 @@ public class UserService {
 
     private final UserParser parser;
 
+    private final PasswordEncoder passwordEncoder;
+
+    private final PasswordCheck check;
+
     @Autowired
-    public UserService(UserJpaRepository repository, UserParser parser) {
+    public UserService(UserJpaRepository repository, UserParser parser, PasswordEncoder passwordEncoder, PasswordCheck check) {
         this.repository = repository;
         this.parser = parser;
+        this.passwordEncoder = passwordEncoder;
+        this.check = check;
     }
 
     public List<UserDTO> findAll() {
         List<User> listUser = repository.findAll();
-        List<UserDTO> userDTOList = listUser.stream().map(parser::toDTO).collect(Collectors.toList());
-        return userDTOList;
+        return listUser.stream().map(parser::toDTO).collect(Collectors.toList());
     }
 
     public UserDTO findById(Long id) {
@@ -40,11 +47,9 @@ public class UserService {
         return parser.toDTO(user.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
-    public User insert(UserDTO userDTO) {
-        User user = new User();
-        user.setName(userDTO.name);
-        user.setEmail(userDTO.email);
-        user.setPassword(userDTO.password);
+    public User insert(UserDTO userDTO) throws Exception {
+        check.checkPasswordRules(userDTO.password);
+        User user = createUser(userDTO);
         return repository.save(user);
     }
 
@@ -72,5 +77,15 @@ public class UserService {
             throw new DataBaseException(e.getMessage());
         }
     }
+
+    private User createUser(UserDTO userDTO) {
+        userDTO.password = passwordEncoder.encode(userDTO.password);
+        User user = new User();
+        user.setName(userDTO.name);
+        user.setEmail(userDTO.email);
+        user.setPassword(userDTO.password);
+        return user;
+    }
+
 
 }
