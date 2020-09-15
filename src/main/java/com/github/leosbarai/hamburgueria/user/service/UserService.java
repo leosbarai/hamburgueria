@@ -1,6 +1,7 @@
 package com.github.leosbarai.hamburgueria.user.service;
 
 import com.github.leosbarai.hamburgueria.config.PasswordCheck;
+import com.github.leosbarai.hamburgueria.exception.MyException;
 import com.github.leosbarai.hamburgueria.user.dto.UserDTO;
 import com.github.leosbarai.hamburgueria.user.entity.User;
 import com.github.leosbarai.hamburgueria.user.parser.UserParser;
@@ -47,7 +48,7 @@ public class UserService {
         return parser.toDTO(user.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
-    public User insert(UserDTO userDTO) throws Exception {
+    public User insert(UserDTO userDTO) throws MyException {
         check.checkPasswordRules(userDTO.password);
         User user = createUser(userDTO);
         return repository.save(user);
@@ -86,6 +87,5 @@ public class UserService {
         user.setPassword(userDTO.password);
         return user;
     }
-
 
 }

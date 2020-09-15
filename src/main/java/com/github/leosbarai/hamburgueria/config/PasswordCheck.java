@@ -1,55 +1,59 @@
 package com.github.leosbarai.hamburgueria.config;
 
-import org.passay.AlphabeticalCharacterRule;
-import org.passay.DigitCharacterRule;
-import org.passay.LengthRule;
-import org.passay.PasswordData;
-import org.passay.PasswordValidator;
-import org.passay.Rule;
-import org.passay.RuleResult;
-import org.passay.WhitespaceRule;
+import com.github.leosbarai.hamburgueria.exception.ExceptionMessages;
+import com.github.leosbarai.hamburgueria.exception.MyException;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class PasswordCheck {
 
-    private static final int MINIMUM_SIZE = 6;
-    private static final int MAXIMUM_SIZE = 10;
-    private static final int DIGITS = 1;
-    private static final int ALPHABET = 1;
+    public void checkPasswordRules(String password) throws MyException {
 
-    public void checkPasswordRules(String password) throws Exception {
+        Set<ExceptionMessages> exceptionMessages = new HashSet<>();
+
         if (StringUtils.isEmpty(password)) {
-            throw new Exception("Password must be informed.");
+            throw new MyException(ExceptionMessages.PASSWORD_REQUIRED);
         }
 
-        LengthRule lengthRule = new LengthRule(MINIMUM_SIZE, MAXIMUM_SIZE);
-
-        WhitespaceRule whitespaceRule = new WhitespaceRule();
-
-        AlphabeticalCharacterRule alphabeticalCharacterRule = new AlphabeticalCharacterRule(ALPHABET);
-
-        DigitCharacterRule digitCharacterRule = new DigitCharacterRule(DIGITS);
-
-        List<Rule> ruleList = new ArrayList<Rule>();
-        ruleList.add(lengthRule);
-        ruleList.add(whitespaceRule);
-        ruleList.add(alphabeticalCharacterRule);
-        ruleList.add(digitCharacterRule);
-
-        PasswordValidator validator = new PasswordValidator(ruleList);
-        PasswordData passwordData = new PasswordData(password);
-
-        RuleResult result = validator.validate(passwordData);
-
-        List<String> msg = validator.getMessages(result);
-
-        if (!result.isValid()) {
-            throw new Exception(msg.toString());
+        if (password.length() < 6 || password.length() > 10) {
+            exceptionMessages.add(ExceptionMessages.PASSWORD_INVALID);
         }
+
+        if (!isDigit(password) || !isLetter(password)){
+            exceptionMessages.add(ExceptionMessages.PASSWORD_DIGIT_LETTER);
+        }
+
+        if (!CollectionUtils.isEmpty(exceptionMessages)) {
+            throw new MyException(exceptionMessages);
+        }
+
     }
+
+    private boolean isDigit(String value) {
+        boolean isDigit = false;
+        for (int i = 0; i < value.length(); i++) {
+            if (Character.isDigit(value.charAt(i))) {
+                isDigit = true;
+                break;
+            }
+        }
+        return isDigit;
+    }
+
+    private boolean isLetter(String value) {
+        boolean isLetter = false;
+        for (int i = 0; i < value.length(); i++) {
+            if (Character.isLetter(value.charAt(i))) {
+                isLetter = true;
+                break;
+            }
+        }
+        return isLetter;
+    }
+
 }

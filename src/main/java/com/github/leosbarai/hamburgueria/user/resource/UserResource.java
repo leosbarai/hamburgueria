@@ -1,5 +1,6 @@
 package com.github.leosbarai.hamburgueria.user.resource;
 
+import com.github.leosbarai.hamburgueria.exception.MyException;
 import com.github.leosbarai.hamburgueria.user.dto.UserDTO;
 import com.github.leosbarai.hamburgueria.user.entity.User;
 import com.github.leosbarai.hamburgueria.user.service.UserService;
@@ -38,7 +39,7 @@ public class UserResource {
     }
 
     @PostMapping
-    public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO) throws Exception {
+    public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO) throws MyException {
         User user = service.insert(userDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(user.getId()).toUri();
