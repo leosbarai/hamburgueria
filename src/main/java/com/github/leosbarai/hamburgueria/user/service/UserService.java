@@ -1,5 +1,6 @@
 package com.github.leosbarai.hamburgueria.user.service;
 
+import com.github.leosbarai.hamburgueria.config.EmailCheck;
 import com.github.leosbarai.hamburgueria.config.PasswordCheck;
 import com.github.leosbarai.hamburgueria.exception.MyException;
 import com.github.leosbarai.hamburgueria.user.dto.UserDTO;
@@ -30,12 +31,15 @@ public class UserService {
 
     private final PasswordCheck check;
 
+    private final EmailCheck emailCheck;
+
     @Autowired
-    public UserService(UserJpaRepository repository, UserParser parser, PasswordEncoder passwordEncoder, PasswordCheck check) {
+    public UserService(UserJpaRepository repository, UserParser parser, PasswordEncoder passwordEncoder, PasswordCheck check, EmailCheck emailCheck) {
         this.repository = repository;
         this.parser = parser;
         this.passwordEncoder = passwordEncoder;
         this.check = check;
+        this.emailCheck = emailCheck;
     }
 
     public List<UserDTO> findAll() {
@@ -79,8 +83,9 @@ public class UserService {
         }
     }
 
-    private User createUser(UserDTO userDTO) {
+    private User createUser(UserDTO userDTO) throws MyException {
         userDTO.password = passwordEncoder.encode(userDTO.password);
+        emailCheck.checkEmailRules(userDTO.email);
         User user = new User();
         user.setName(userDTO.name);
         user.setEmail(userDTO.email);
