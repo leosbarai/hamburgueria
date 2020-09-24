@@ -1,4 +1,4 @@
-package com.github.leosbarai.hamburgueria.usuario.entity;
+package com.github.leosbarai.hamburgueria.user.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,32 +7,26 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
-public class Usuario {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nome;
+    private String name;
     private String email;
-
-    public Usuario() {
-    }
-
-    public Usuario(String nome, String email) {
-        this.nome = nome;
-        this.email = email;
-    }
+    private String password;
+    private boolean admin;
 
     public Long getId() {
         return id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -43,12 +37,28 @@ public class Usuario {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Usuario usuario = (Usuario) o;
-        return Objects.equals(email, usuario.email);
+        User user = (User) o;
+        return Objects.equals(email, user.email);
     }
 
     @Override
@@ -58,8 +68,8 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "Usuario{" +
-                "nome='" + nome + '\'' +
+        return "User{" +
+                "name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }
