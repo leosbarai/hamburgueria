@@ -1,4 +1,4 @@
-package com.github.leosbarai.hamburgueria.config;
+package com.github.leosbarai.hamburgueria.user.config;
 
 import com.github.leosbarai.hamburgueria.exception.ExceptionMessages;
 import com.github.leosbarai.hamburgueria.exception.MyException;
